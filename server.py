@@ -176,7 +176,7 @@ def delete_files():
 
 @app.route('/delete_all')
 def delete_all_files():
-    folder_funcs.delete_all_files_in_folder()
+    folder_funcs.delete_all_files_in_folder(UPLOAD_FOLDER)
     return redirect(url_for('list_files'))
     #return render_template('list.html')
 #=========================================================

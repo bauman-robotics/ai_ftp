@@ -11,16 +11,14 @@ file_h = 28
 file_w = 28
 MAX_COUNT_TEST_IMGS = 100
 
-#=== This path is send by up level ===
+#=== Fake path === This path is send by up level ===
 work_directory = "/home/andrey/projects/ai/ai_ftp"
-#=====================================
+#===================================================
 #=== Input Path ===
 input_test_folded_name = "/Upload/"
-input_directory = work_directory + input_test_folded_name
-
 #=== Output Path ===
 output_result_folder_name = "/Upload/"
-result_directory = work_directory + output_result_folder_name
+
 result_file_name = "result.c"
 #===================
 
@@ -44,6 +42,9 @@ def Test_Imgs_Get(path, f_name_ok) :
 	global list_of_good_test_files
 	global count_of_good_test_files
 	work_directory = path
+	input_directory = work_directory + input_test_folded_name
+	result_directory = work_directory + output_result_folder_name
+
 	input_directory = str(work_directory) + str(input_test_folded_name)     #"/web_test_imgs/"
 	result_directory = str(work_directory) + str(output_result_folder_name) #"/web_results" 
 	#result_file_name = "/result.c"
@@ -160,7 +161,7 @@ def Get_Output_Folder_Path() :
 
 
 
-def delete_all_files_in_folder():
+def delete_all_files_in_folder(folder_path):
 	"""
 	Удаляет все файлы из указанной папки, кроме указанного файла.
 
@@ -168,9 +169,7 @@ def delete_all_files_in_folder():
 	:param exclude_filename: Имя файла, который не нужно удалять.
 	"""
 	exclude_filename = 'readme.txt'
-	global input_directory
-	folder_path = input_directory
-	print('input_directory', input_directory)
+	print('input_directory', folder_path)
 	try:
 		# Получаем список всех файлов в папке
 		files = glob.glob(os.path.join(folder_path, '*'))
