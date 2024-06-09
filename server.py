@@ -85,16 +85,29 @@ def index():
     return (ROOT / 'index.html').resolve().read_bytes() 
 #=========================================================
 
+# @app.route('/', methods=['POST', 'PUT'])
+# def upload():
+#     f = request.files['file']
+#     if f.filename == '':
+#         return redirect(url_for('list_files'))
+#     save_path = UPLOAD_FOLDER / f.filename
+#     f.save(save_path)
+#     #return 'File uploaded successfully'
+#     #return redirect(url_for('list_files'))
+#     return redirect("/")
+
 @app.route('/', methods=['POST', 'PUT'])
 def upload():
-    f = request.files['file']
-    if f.filename == '':
-        return redirect(url_for('list_files'))
-    save_path = UPLOAD_FOLDER / f.filename
-    f.save(save_path)
-    #return 'File uploaded successfully'
-    #return redirect(url_for('list_files'))
-    return redirect("/")
+    uploaded_files = request.files.getlist('file')  # Получаем список файлов
+
+    for f in uploaded_files:
+        if f.filename == '':
+            continue  # Пропускаем пустые файлы
+
+        save_path = UPLOAD_FOLDER / f.filename
+        f.save(save_path)
+
+    return redirect("/")    
 #=========================================================
 
 @app.route('/', methods=['GET'])
@@ -191,6 +204,6 @@ def test_uploaded_images():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
-    #app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
+    #app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
+    app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
 #=========================================================

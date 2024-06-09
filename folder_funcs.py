@@ -63,14 +63,10 @@ def Test_Imgs_Get(path, f_name_ok) :
 	#=== Get list of test files 
 	test_files = os.listdir(input_directory)
 	num_test_files = len(test_files)
-	info_Count_files = "Count_files - " + str(num_test_files)
-	first_file_name = "First_file_name - " + test_files[0]
+
+	#first_file_name = "First_file_name - " + test_files[0]
 	file_count = 0
 	
-	res_flie = open(result_directory + result_file_name, mode="w")
-	res_flie.write(info_Count_files  +'\n')    
-	res_flie.write(first_file_name   +'\n') 
-	#res_flie.close()
 	#=============================================================
 	# Try to find test image File in folder "./web_test_imgs" 
 	#=== Check if it right test_files 
@@ -93,52 +89,22 @@ def Test_Imgs_Get(path, f_name_ok) :
 			file_bad_count = file_bad_count + 1
 	#=============================================================
 	#=== Check Ok file list 
-	#res_flie = open(result_directory + result_file_name, mode="a")	    
-	res_flie.write("Warning: MAX_COUNT_TEST_IMGS = " + str(MAX_COUNT_TEST_IMGS)  +'\n')
-	ok_list = "#=== Ok file list =========="
-	ok_num = str(len(f_name_ok))
-	res_flie.write(ok_list   +'\n')
-	res_flie.write("count = " + str(file_ok_count)   +'\n')
+	res_flie = open(result_directory + result_file_name, mode="w")
+	res_flie.write("Max number of files = " + str(MAX_COUNT_TEST_IMGS)  +'\n')
+	info_Count_files = "Total number of files - " + str(num_test_files)
+	res_flie.write(info_Count_files  +'\n')    
+	res_flie.write("Ok number of files = " + str(file_ok_count)   +'\n')
 	for file_count in range(file_ok_count):
-		ok_name = str(file_count) + "   " + f_name_ok[file_count]
-		res_flie.write(ok_name   +'\n')
-		#===
 		list_of_good_test_files[file_count] = f_name_ok[file_count]
-		#===		
-	res_flie.write("#============================"   +'\n')
+
 	#=============================================================
-	#=== Check OBad file list 
-	#res_flie = open(result_directory + result_file_name, mode="w")
-	bad_list = "#=== Bad file list =========="
-	bad_num = str(len(f_name_bad))
-	res_flie.write(bad_list   +'\n')
-	res_flie.write("count = " + str(file_bad_count)   +'\n')
-	for file_count in range(file_bad_count):
-		bad_name = str(file_count) + "   " + f_name_bad[file_count]
-		res_flie.write(bad_name   +'\n')
-	res_flie.write("#============================"   +'\n') 
+	res_flie.write("Bad number of files = " + str(file_bad_count)   +'\n')
 	res_flie.close()
 	#=============================================================
 	count_of_good_test_files = file_ok_count
 	return count_of_good_test_files
 #=============================================================
 #=============================================================
-
-def Save_Result(predictions) :  
-	global list_of_good_test_files
-	global count_of_good_test_files
-	global result_file_name
-	global result_directory	
-	res_flie = open(result_directory + result_file_name, mode="a")
-	res_flie.write('#######################'   +'\n')
-	for p_num in range (count_of_good_test_files):
-		res_flie.write('#######################'   +'\n')
-		res_flie.write('File_Name = ' + str(list_of_good_test_files[p_num])  +'\n')
-		for i in range (10):
-			line = 'is ' + str(i) + '---' + "%.3f" %(predictions[p_num][i])  +'\n'
-			res_flie.write(line)
-#=============================================================================================
-#=============================================================================================
 
 #def write_table(pred, file_names, output_file):
 def write_table(pred):	
@@ -151,7 +117,7 @@ def write_table(pred):
 	w_first_row = max([len(name) for name in file_names]) + 2
 
 	# Открываем файл 'result.txt' в режиме записи
-	with open(output_file, 'w') as file:
+	with open(output_file, 'a') as file:
 		# Записываем горизонтальные линии таблицы, учитывая w_first_row
 		file.write('+' + '-'*w_first_row + '+' + '+-------' * 10 + '+\n')
 
