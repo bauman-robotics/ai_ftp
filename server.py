@@ -13,9 +13,10 @@ import urllib
 
 from time import time
 import self_img_test
+import folder_funcs
 
 # import socket
-# import shutil
+import shutil
 
 DOWNLOAD_INTERVAL = 0
 
@@ -24,13 +25,16 @@ DOWNLOAD_INTERVAL = 0
 #== If Start from Crontab - wrong path ===
 UPLOAD_FOLDER = Path('./Upload').resolve()
 ROOT = Path("./static").resolve()
+DEFAULT_IMGS_FOLDER = Path("./default_image_folder").resolve()
 #==========================================
 #== Use instead absolute path =============
 #UPLOAD_FOLDER = Path('/home/arkhan/Andrey/ai_ftp/Upload').resolve()
 #ROOT = Path('/home/arkhan/Andrey/ai_ftp/static').resolve()
+#DEFAULT_IMGS_FOLDER = Path('/home/arkhan/Andrey/ai_ftp/default_image_folder').resolve()
 #==========================================
 
 directory = UPLOAD_FOLDER
+
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'mp4', 'mp3', 'ogg', 'm4a', 'avi', 'mov', 'zip', 'rar', '7z', 'tar', 'gz', 'iso', 'apk', 'exe', 'msi', 'deb', 'pkg', 'dmg', 'bin', 'bat', 'sh', 'py', 'c', 'cpp',
                          'java', 'js', 'html', 'htm', 'css', 'scss', 'json', 'xml', 'csv', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf', 'csv', 'db', 'dbf', 'log', 'mdb', 'sav', 'sql', 'tar', 'xml', 'apk', 'bat', 'bin', 'com', 'exe', 'jar', 'ai'])
@@ -84,17 +88,6 @@ def get_readable_file_size(size_in_bytes):
 def index():
     return (ROOT / 'index.html').resolve().read_bytes() 
 #=========================================================
-
-# @app.route('/', methods=['POST', 'PUT'])
-# def upload():
-#     f = request.files['file']
-#     if f.filename == '':
-#         return redirect(url_for('list_files'))
-#     save_path = UPLOAD_FOLDER / f.filename
-#     f.save(save_path)
-#     #return 'File uploaded successfully'
-#     #return redirect(url_for('list_files'))
-#     return redirect("/")
 
 @app.route('/', methods=['POST', 'PUT'])
 def upload():
@@ -167,22 +160,33 @@ def download(filename):
 
 @app.route('/delete', methods=['POST'])
 def delete_files():
+    exclude_f_name = 'README.md' #'0.png'
     file_names = request.form.getlist('delete_file')
+    print('file_names = ', file_names)
+    # if (file_names != 0):
     for file_name in file_names:
         filepath = file_name
-        #=== Not work =================================
-        # if filepath.lower().startswith(directory.lower()):
-        #     if os.path.isdir(filepath):
-        #         shutil.rmtree(filepath)
-        #     else:
-        #         os.remove(filepath)
-        #=== Instead that =============================
         if os.path.isdir(filepath):
             shutil.rmtree(filepath)
         else:
             os.remove(filepath)
         #==============================================
     return redirect(url_for('list_files'))
+#=========================================================
+
+@app.route('/delete_all')
+def delete_all_files():
+    folder_funcs.delete_all_files_in_folder()
+    return redirect(url_for('list_files'))
+    #return render_template('list.html')
+#=========================================================
+
+@app.route('/restore_default')
+def restore_default_images():
+    src_folder = DEFAULT_IMGS_FOLDER
+    dst_folder = UPLOAD_FOLDER
+    copy_folder_contents(src_folder, dst_folder)
+    return redirect(url_for('list_files'))  
 #=========================================================
 
 @app.route('/assets/<path:filename>')
@@ -201,9 +205,32 @@ def test_uploaded_images():
     return redirect(url_for('list_files'))
 #=========================================================
 
+def copy_folder_contents(src_folder, dst_folder):
+    """
+    Копирует содержимое из одной указанной папки в другую.
 
+    :param src_folder: Путь к исходной папке.
+    :param dst_folder: Путь к целевой папке.
+    """
+    try:
+        if not os.path.exists(dst_folder):
+            os.makedirs(dst_folder)
+
+        for item in os.listdir(src_folder):
+            src_path = os.path.join(src_folder, item)
+            dst_path = os.path.join(dst_folder, item)
+            
+            if os.path.isdir(src_path):
+                shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
+            else:
+                shutil.copy2(src_path, dst_path)
+        
+        print('Содержимое успешно скопировано.')
+    except Exception as e:
+        print(f'Произошла ошибка при копировании содержимого: {e}')
+#=========================================================
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
-    app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
+    app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
+    #app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
 #=========================================================

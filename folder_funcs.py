@@ -5,7 +5,7 @@ import shutil
 import os
 import numpy as np
 from PIL import Image
-
+import glob
 
 file_h = 28
 file_w = 28
@@ -157,3 +157,33 @@ def Get_Output_Folder_Path() :
 
 #=============================================================
 #=============================================================
+
+
+
+def delete_all_files_in_folder():
+	"""
+	Удаляет все файлы из указанной папки, кроме указанного файла.
+
+	:param folder_path: Путь к папке, из которой нужно удалить все файлы.
+	:param exclude_filename: Имя файла, который не нужно удалять.
+	"""
+	exclude_filename = 'readme.txt'
+	global input_directory
+	folder_path = input_directory
+	print('input_directory', input_directory)
+	try:
+		# Получаем список всех файлов в папке
+		files = glob.glob(os.path.join(folder_path, '*'))
+
+		# Удаляем каждый файл, кроме указанного
+		for file in files:
+			if os.path.isfile(file) and os.path.basename(file) != exclude_filename:
+				os.remove(file)
+				print(f'Файл {file} успешно удален.')
+			elif os.path.basename(file) == exclude_filename:
+				print(f'Файл {file} не будет удален.')
+
+		print('Все файлы, кроме указанного, успешно удалены.')
+	except Exception as e:
+		print(f'Произошла ошибка при удалении файлов: {e}')
+

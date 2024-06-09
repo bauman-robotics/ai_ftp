@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Ai ftp</title>
-    <link rel="shortcut icon" type="image/x-icon" href="https://graph.org/file/d01f7bd7e180e4021b194.png">
-    <style>
+  <link rel="shortcut icon" type="image/x-icon" href="https://graph.org/file/d01f7bd7e180e4021b194.png">
+  <style>
     /* Reset default browser styles */
-    *{
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -16,7 +16,6 @@
     body {
       font-family: 'Helvetica Neue', sans-serif;
       background-color: #202020;
-      /*background-color: #f2f2f2; */
       color: #333;
     }
 
@@ -53,7 +52,6 @@
     .file-details {
       display: flex;
       align-items: center;
-
     }
 
     .copy-icon {
@@ -120,128 +118,116 @@
       opacity: 0;
       transition: all 0.2s ease;
     }
-  
+
     .delete-checkbox input[type="checkbox"]:checked ~ label.delete-label:before {
-    background-color: #007bff;
-    opacity: 1;
+      background-color: #007bff;
+      opacity: 1;
     }
-  
+
     .delete-selected {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
     }
-  
+
     .delete-btn {
-    font-size: 1.2rem;
-    background-color: #084cdf;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+      font-size: 1.2rem;
+      background-color: #084cdf;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-  
+
     .delete-btn:hover {
-    background-color: #0062cc;
-     }
+      background-color: #0062cc;
+    }
 
     .copied {
-            color: #ff0077 !important;
+      color: #ff0077 !important;
     }
+
     p {
-        font-size: 1.5rem;
-        text-align: center;
-        color: #007bff
+      font-size: 1.5rem;
+      text-align: center;
+      color: #007bff;
     }
-    <!-- ======================================================================= -->
 
+    .submit-btn {
+      margin-right: 0px;
+      border: none;
+      background: #084cdf;
+      padding: 10px 50px;
+      border-radius: 10px;
+      color: rgb(255, 255, 255);
+      cursor: pointer;
+      transition: background .2s ease-in-out;
+    }
 
-    <!-- ======================================================================= -->
+    .submit-btn:hover {
+      background: #0d45a5;
+    }
 
-    </style>
+  </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
 </head>
 <body>
   <header>
     <h1>Ai ftp</h1>
-        <p>Number of files: {{ Avail_Files }}</p>
-        <p>Storage Available: {{ Avail_Storage }}</p>
+    <p>Number of files: {{ Avail_Files }}</p>
+    <p>Storage Available: {{ Avail_Storage }}</p>
   </header>
-  <!-- ############ main ################################################# -->
   <main>
     <form action="{{ url_for('delete_files') }}" method="POST">
-    <section class="container">
-      {% for Name, Links, Path, Size in data %}
-      <div class="file">
-        <div class="file-details">
-          <i class="far fa-copy copy-icon" data-clipboard-text="{{ request.host_url }}{{ Links }}"></i>
-          <a href="{{ Links }}">{{ Name }}</a>
-          <span class="file-size">{{ Size }}</span>
+      <section class="container">
+        {% for Name, Links, Path, Size in data %}
+        <div class="file">
+          <div class="file-details">
+            <i class="far fa-copy copy-icon" data-clipboard-text="{{ request.host_url }}{{ Links }}"></i>
+            <a href="{{ Links }}">{{ Name }}</a>
+            <span class="file-size">{{ Size }}</span>
+          </div>
+          <div class="delete-checkbox">
+            <input type="checkbox" name="delete_file" value="{{ Path }}">
+            <label class="delete-label"></label>
+          </div>
         </div>
-        <div class="delete-checkbox">
-          <input type="checkbox" name="delete_file" value="{{ Path }}">
-          <label class="delete-label"></label>
+        {% endfor %}
+        <div class="delete-selected">          
+          <button type="submit" class="delete-btn">Delete Selected Files/Folders</button>          
         </div>
-      </div>
-      {% endfor%}
-      <!-- ############ Delete Btn ################################################# -->
-      <div class="delete-selected">
-        <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete the selected files/folders?');">Delete Selected Files/Folders</button>
-      </div>
-      <!-- ############ Start page ################################################# -->      
-      <!-- ---------------- -->
-      <div class="delete-selected">
-        <!-- <a href="/" >Start page</a> -->
-        <style>
-          .submit-btn {
-            margin-right: 0px;
-            border: none;
-            background: #084cdf;
-            padding: 10px 50px;
-            border-radius: 10px;
-            color: rgb(255, 255, 255);
-            cursor: pointer;
-            transition: background .2s ease-in-out;
-          }
-
-          .submit-btn:hover {
-            background: #0d45a5;
-          }
-        </style>
-        <a href="/" class="submit-btn">  Start page </a>
-      </div>   
-      <!-- ---------------- -->   
-      <!-- ############ Test Uploaded Images -btn ################################################# -->
-      <!-- ---------------- -->
-      <div class="delete-selected">
-        <a href="/test_images" class="submit-btn">  ai Test</a>
-      </div>   
-      <!-- ---------------- -->       
-    </section>
+        <div class="delete-selected">
+          <a href="/" class="submit-btn">Start page</a>
+        </div>
+        <div class="delete-selected">
+          <a href="/test_images" class="submit-btn">ai Test</a>
+        </div>
+        <div class="delete-selected">
+          <a href="/delete_all" class="submit-btn" onclick="return confirm('Are you sure you want to delete all files?');">Delete All</a>
+        </div>  
+        <div class="delete-selected">
+          <a href="/restore_default" class="submit-btn">Restore Default</a>
+        </div>           
+      </section>
+    </form>
   </main>
-  <!-- ############ /main ################################################# -->
-
-  <!-- ############ Copy links to file ################################################# -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
   <script>
     new ClipboardJS('.copy-icon');
-    document.addEventListener('DOMContentLoaded', function()
-      {
-        new ClipboardJS('.copy-icon');
-        var clipboardIcons = document.querySelectorAll('.copy-icon');
-        clipboardIcons.forEach(function(icon) 
-        {
-          icon.addEventListener('click', function() 
-            { icon.classList.add('copied');
-              setTimeout(function() 
-                { icon.classList.remove('copied'); 
-                }, 1000);
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+      new ClipboardJS('.copy-icon');
+      var clipboardIcons = document.querySelectorAll('.copy-icon');
+      clipboardIcons.forEach(function(icon) {
+        icon.addEventListener('click', function() {
+          icon.classList.add('copied');
+          setTimeout(function() {
+            icon.classList.remove('copied');
+          }, 1000);
         });
       });
+    });
   </script>
-  <!-- ############ /Copy links to file ################################################# -->
 </body>
 </html>
