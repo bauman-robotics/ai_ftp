@@ -21,7 +21,7 @@ def main():
     path = os.getcwd()
     #==========================================
     #== Use instead absolute path =============    
-    #path = Path('/home/arkhan/Andrey/ai_ftp/')
+    #path = '/home/arkhan/Andrey/ai_ftp/'
     #==========================================
     
     
