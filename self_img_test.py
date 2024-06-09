@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[26]:
 
 def main():
     from tensorflow.keras.datasets import mnist
@@ -16,8 +16,16 @@ def main():
     #-----------------
     import os
     
+    #==========================================
+    #== If Start from Crontab - wrong path ===
+    path = os.getcwd()
+    #==========================================
+    #== Use instead absolute path =============    
+    #path = Path('/home/arkhan/Andrey/ai_ftp/')
+    #==========================================
     
-    # In[2]:
+    
+    # In[27]:
     
     
     #===== Old Model =====================
@@ -33,7 +41,6 @@ def main():
     #-------------------------------
     # #-----------------------------------------------
     # # Восстановление состояния модели
-    # path = os.getcwd()
     # model_file = path + '/my_model.keras'
     # print("model_file_name=", model_file)
     # model = keras.models.load_model(model_file)
@@ -43,7 +50,7 @@ def main():
     #====================================
     
     
-    # In[3]:
+    # In[28]:
     
     
     #===== New Model =====================
@@ -87,12 +94,11 @@ def main():
     model.summary()
     
     
-    # In[4]:
+    # In[29]:
     
     
     #===== New Model =====================
     # # Восстановление состояния модели ================================= GPT 
-    path = os.getcwd()
     model_file = path + '/my_model.keras'
     if os.path.exists(model_file):
         model = keras.models.load_model(model_file)
@@ -110,7 +116,7 @@ def main():
     # с (60000, 28, 28) на (60000, 28, 28, 1) и (10000, 28, 28, 1) соответственно.
     
     
-    # In[5]:
+    # In[30]:
     
     
     #################################################################################
@@ -120,7 +126,6 @@ def main():
     import folder_funcs
     import numpy as np
     import os           # temp 
-    path = os.getcwd()  # temp
     print('path = ', path)
     f_name_ok  = ['' for _ in range(folder_funcs.MAX_COUNT_TEST_IMGS)]
     
@@ -131,7 +136,7 @@ def main():
     # print("1_file_name = ", f_name_ok[0])
     
     
-    # In[6]:
+    # In[31]:
     
     
     #=== Get Test Imgs ===
@@ -145,7 +150,7 @@ def main():
         imgs[i] = imgs[i].astype('float32') / 255
     
     
-    # In[7]:
+    # In[32]:
     
     
     #=== plot Test Imgs ===
@@ -176,7 +181,7 @@ def main():
     #fig.savefig('Upload/' + 'plt.png')
     
     
-    # In[8]:
+    # In[33]:
     
     
     #===== Old Model =====================
@@ -188,14 +193,14 @@ def main():
     # print('test_imgs.shape =', imgs.shape) 
     
     
-    # In[10]:
+    # In[34]:
     
     
     if (f_ok_count > 0):
         predictions = model.predict(imgs)
     
     
-    # In[11]:
+    # In[35]:
     
     
     #=== Save results to file ===
@@ -204,20 +209,43 @@ def main():
         folder_funcs.write_table(predictions)
     
     
-    # In[12]:
+    # In[36]:
     
     
     model.save(model_file)
     
     
-    # In[13]:
+    # In[25]:
     
     
-    #get_ipython().system('jupyter nbconvert --to script self_img_test.ipynb')
+    #------------------------------------------------------
+    #=== For genarated script self_img_test.py uncomment line below
+    
+    #!jupyter nbconvert --to script self_img_test.ipynb
+    
+    # if was generated script self_img_test.py 
+    # need add folow below to script self_img_test.ipynb
+    
+    # def main():
+    #     all content of script script self_img_test.py 
+    #     pass
+    
+    # if __name__ == '__main__':
+    #     main()  # скрипт запускается непосредственно
+    
+        #==========================================
+        #== If Start from Crontab - wrong path ===
+        #path = os.getcwd()
+        #==========================================
+        #== Use instead absolute path =============    
+        #path = Path('/home/arkhan/Andrey/ai_ftp/')
+        #==========================================
+    
+    #------------------------------------------------------
     
     
     # In[ ]:
-    
+
     pass
 
 if __name__ == '__main__':
