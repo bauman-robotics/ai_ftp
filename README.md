@@ -1,18 +1,18 @@
 # Keras Tenserflow test
-### First step
-### Number recognition
-### Added convolutional network
+###### First step
+###### Number recognition
+###### Added convolutional network
 
-### MNIST dataSets
-### Tested by self pics
+###### MNIST dataSets
+###### Tested by self pics
 
-### Files size = ( 28 * 28 ) pix
+###### Files size = ( 28 * 28 ) pix
 
-### Add FTP server for number recognition tests
-### Upload your test images
-### Press Btn "Test Uploaded Images"
-### Get result.c from Upload Folder
-### Get plt.png from Upload Folder
+###### FTP server for number recognition tests
+###### Upload your test images
+###### Press Btn "Test Uploaded Images"
+###### Get result.c from Upload Folder
+###### Get plt.png from Upload Folder
 
 ![Alt text](./Upload/plt.png?raw=true "Title")
 
