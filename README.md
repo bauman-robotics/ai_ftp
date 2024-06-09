@@ -15,7 +15,7 @@
 ###### Get plt.png from Upload Folder
 
 
-![Alt text](Upload/plt.png?raw=true "Title")
+![Alt text](./plt.png?raw=true "Title")
 
 
 | File  |   0   |   1   |   2   |   3   |   4   |   5   |   6   |   7   |   8   |   9   |
