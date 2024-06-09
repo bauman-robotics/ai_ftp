@@ -26,8 +26,8 @@ UPLOAD_FOLDER = Path('./Upload').resolve()
 ROOT = Path("./static").resolve()
 #==========================================
 #== Use instead absolute path =============
-#UPLOAD_FOLDER = Path('/home/arkhan/Andrey/ftp_server/Upload').resolve()
-#ROOT = Path('/home/arkhan/Andrey/ftp_server/static').resolve()
+#UPLOAD_FOLDER = Path('/home/arkhan/Andrey/ai_ftp/Upload').resolve()
+#ROOT = Path('/home/arkhan/Andrey/ai_ftp/static').resolve()
 #==========================================
 
 directory = UPLOAD_FOLDER

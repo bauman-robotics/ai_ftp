@@ -3,6 +3,8 @@
 
     # In[1]:
 
+#=== Check the path ===
+
 def main():
     from tensorflow.keras.datasets import mnist
     (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
@@ -15,6 +17,13 @@ def main():
     from PIL import Image
     #-----------------
     import os
+
+    #=========================================================
+    path = os.getcwd()
+    #=========================================================
+    #=== if use Crontab - place absolute path from work folder
+    #path = '/home/arkhan/Andrey/ai_ftp'
+    #=========================================================
 
 
     # In[2]:
@@ -33,7 +42,6 @@ def main():
     #-------------------------------
     # #-----------------------------------------------
     # # Восстановление состояния модели
-    # path = os.getcwd()
     # model_file = path + '/my_model.keras'
     # print("model_file_name=", model_file)
     # model = keras.models.load_model(model_file)
@@ -92,7 +100,6 @@ def main():
 
     #===== New Model =====================
     # # Восстановление состояния модели ================================= GPT 
-    path = os.getcwd()
     model_file = path + '/my_model.keras'
     if os.path.exists(model_file):
         model = keras.models.load_model(model_file)
@@ -119,8 +126,6 @@ def main():
     #=== Get Test Imgs Names and Valid Count ===
     import folder_funcs
     import numpy as np
-    import os           # temp 
-    path = os.getcwd()  # temp
     print('path = ', path)
     f_name_ok  = ['' for _ in range(folder_funcs.MAX_COUNT_TEST_IMGS)]
 
