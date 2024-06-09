@@ -14,7 +14,7 @@
 ### Get result.c from Upload Folder
 ### Get plt.png from Upload Folder
 
-![Alt text](./Test_imgs/digits_test.png?raw=true "Title")
+![Alt text](./Upload/plt.png?raw=true "Title")
 
 
 
