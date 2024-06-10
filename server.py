@@ -13,9 +13,14 @@ import folder_funcs
 
 from psutil import disk_usage
 from time import time
-import logging
 import ftplib
 import urllib
+#=============== logs ====================
+import logging
+from logging.handlers import RotatingFileHandler
+
+
+#========================================
 
 # Configuration
 #==========================================
@@ -108,23 +113,27 @@ def upload_file():
 
 @app.route('/list')
 def list_files():
-    total, used, free , disk = disk_usage('/')
-    files = get_files(UPLOAD_FOLDER, sort_by='mtime')
-    file_links = []
-    file_names = []
-    file_path = []
-    file_size = []
-    for file in files:
-        file_path.append(file[0])
-        file_links.append(url_for('download', filename=os.path.basename(file[0])))
-        file_names.append(os.path.basename(file[0]))
-        size = os.path.getsize(file[0])
-        size = get_readable_file_size(size)
-        file_size.append(size)
-    Avail_Files = len(file_names)
-    Avail_Storage = get_readable_file_size(free)
-    data = zip(file_names, file_links, file_path, file_size)
-    return render_template('list.html', data=data, Avail_Files = Avail_Files, Avail_Storage = Avail_Storage)
+    try:
+        total, used, free , disk = disk_usage('/')
+        files = get_files(UPLOAD_FOLDER, sort_by='mtime')
+        file_links = []
+        file_names = []
+        file_path = []
+        file_size = []
+        for file in files:
+            file_path.append(file[0])
+            file_links.append(url_for('download', filename=os.path.basename(file[0])))
+            file_names.append(os.path.basename(file[0]))
+            size = os.path.getsize(file[0])
+            size = get_readable_file_size(size)
+            file_size.append(size)
+        Avail_Files = len(file_names)
+        Avail_Storage = get_readable_file_size(free)
+        data = zip(file_names, file_links, file_path, file_size)
+        return render_template('list.html', data=data, Avail_Files=Avail_Files, Avail_Storage=Avail_Storage)
+    except Exception as e:
+        app.logger.error('Error in list_files: %s', e)
+        return "An error occurred", 500
 #=========================================================
 
 @app.route('/download/<path:filename>', methods=['GET'])
@@ -232,6 +241,22 @@ if __name__ == '__main__':
     set_working_directory()
     # Ваш основной код здесь
     current_directory = os.getcwd()
+
+
+    # Setup logging
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+
+    file_handler = RotatingFileHandler('logs/app.log', maxBytes=10240, backupCount=10)
+    file_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    ))
+    file_handler.setLevel(logging.INFO)
+
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('Application startup')
+
     print(f"Current directory: {current_directory}")
 
     #app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
