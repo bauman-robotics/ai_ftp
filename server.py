@@ -1,26 +1,26 @@
 # make a simple flask upload server for testing purposes only
 
 from psutil import disk_usage
-from flask import Flask, request, redirect, url_for, render_template, send_from_directory
+from flask import Flask, request, redirect, url_for, render_template, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 import os
 from pathlib import Path
-import logging
-
 from ftplib import FTP
-import ftplib
-import urllib
-
+import shutil
 from time import time
 import self_img_test
 import folder_funcs
 
-# import socket
-import shutil
+from psutil import disk_usage
+from time import time
+import logging
+import ftplib
+import urllib
 
-DOWNLOAD_INTERVAL = 0
+import get_current_directory
 
 
+# Configuration
 #==========================================
 #== If Start from Crontab - wrong path ===
 UPLOAD_FOLDER = Path('./Upload').resolve()
@@ -32,25 +32,19 @@ DEFAULT_IMGS_FOLDER = Path("./default_image_folder").resolve()
 #ROOT = Path('/home/arkhan/Andrey/ai_ftp/static').resolve()
 #DEFAULT_IMGS_FOLDER = Path('/home/arkhan/Andrey/ai_ftp/default_image_folder').resolve()
 #==========================================
-
-directory = UPLOAD_FOLDER
-
-
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'mp4', 'mp3', 'ogg', 'm4a', 'avi', 'mov', 'zip', 'rar', '7z', 'tar', 'gz', 'iso', 'apk', 'exe', 'msi', 'deb', 'pkg', 'dmg', 'bin', 'bat', 'sh', 'py', 'c', 'cpp',
                          'java', 'js', 'html', 'htm', 'css', 'scss', 'json', 'xml', 'csv', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf', 'csv', 'db', 'dbf', 'log', 'mdb', 'sav', 'sql', 'tar', 'xml', 'apk', 'bat', 'bin', 'com', 'exe', 'jar', 'ai'])
-
-error = "<html><head><title>{status}</title></head><body><center><h1>{status}</h1></center><hr><center>{server}</center></body></html>"
-
-#app = Flask(__name__)
-#app = Flask(__name__, template_folder=f"{path}")
-app = Flask(__name__, template_folder=ROOT)
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+DOWNLOAD_INTERVAL = 0
+
+#error = "<html><head><title>{status}</title></head><body><center><h1>{status}</h1></center><hr><center>{server}</center></body></html>"
+
+app = Flask(__name__, template_folder=ROOT)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 #=========================================================
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 #=========================================================
 
 def get_files(path, sort_by='mtime'):
@@ -113,7 +107,7 @@ def upload_file():
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
-            return 'No selected file ddddddd'
+            return 'No selected file'
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -131,15 +125,11 @@ def list_files():
     file_size = []
     for file in files:
         file_path.append(file[0])
-        #encoded_filename = urllib.parse.quote(file[0])
-        #file_links.append(url_for('download', filename=encoded_filename))
         file_links.append(url_for('download', filename=os.path.basename(file[0])))
         file_names.append(os.path.basename(file[0]))
         size = os.path.getsize(file[0])
         size = get_readable_file_size(size)
         file_size.append(size)
-        #print('file_name = ', os.path.basename(file[0]))
-        #print('file_links = ', url_for('download', filename=os.path.basename(file[0])))
     Avail_Files = len(file_names)
     Avail_Storage = get_readable_file_size(free)
     data = zip(file_names, file_links, file_path, file_size)
@@ -153,8 +143,6 @@ def download(filename):
     logging.info(app.root_path)
     full_path = os.path.join(app.root_path, UPLOAD_FOLDER)
     logging.info(full_path)
-    #print('full_path = ', full_path)
-    #print('filename = ', filename)
     return send_from_directory(full_path, filename, as_attachment=True)
 #=========================================================
 
@@ -163,14 +151,12 @@ def delete_files():
     exclude_f_name = 'README.md' #'0.png'
     file_names = request.form.getlist('delete_file')
     print('file_names = ', file_names)
-    # if (file_names != 0):
     for file_name in file_names:
-        filepath = file_name
-        if os.path.isdir(filepath):
+        filepath = Path(file_name)
+        if filepath.isdir(filepath):
             shutil.rmtree(filepath)
         else:
-            os.remove(filepath)
-        #==============================================
+            filepath.unlink()
     return redirect(url_for('list_files'))
 #=========================================================
 
@@ -230,7 +216,33 @@ def copy_folder_contents(src_folder, dst_folder):
         print(f'Произошла ошибка при копировании содержимого: {e}')
 #=========================================================
 
+@app.route('/preview')
+def preview():
+    file_path = request.args.get('path')
+    if not file_path or not Path(file_path).exists():
+        return jsonify({'success': False, 'url': ''})
+
+    file_ext = Path(file_path).suffix.lower()
+    if file_ext in {'.png', '.jpg', '.jpeg', '.gif', '.webp'}:
+        file_url = url_for('download', filename=os.path.basename(file_path))
+        return jsonify({'success': True, 'url': file_url})
+    else:
+        return jsonify({'success': False, 'url': ''})
+#=========================================================
+
+def set_working_directory():
+    # Определяем путь к директории, в которой находится текущий скрипт
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(script_directory)
+#=========================================================
+
 if __name__ == '__main__':
+
+    set_working_directory()
+    # Ваш основной код здесь
+    current_directory = os.getcwd()
+    print(f"Current directory: {current_directory}")
+
     app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
     #app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
 #=========================================================

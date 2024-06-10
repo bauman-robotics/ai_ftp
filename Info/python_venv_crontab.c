@@ -1,4 +1,6 @@
 
+#* * * * * /usr/bin/python3 /home/andrey/projects/ai/ai_ftp/server.py >> /home/andrey/projects/ai/ai_ftp/logfile.log 2>&1
+
 #=== Crontab -e =====================================================
 # m h  dom mon dow 
 */1 * * * *  - the same every one minutes 

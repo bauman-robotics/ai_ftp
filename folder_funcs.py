@@ -12,7 +12,7 @@ file_w = 28
 MAX_COUNT_TEST_IMGS = 100
 
 #=== Fake path === This path is send by up level ===
-work_directory = "/home/andrey/projects/ai/ai_ftp"
+work_directory = '/' #"/home/andrey/projects/ai/ai_ftp"
 #===================================================
 #=== Input Path ===
 input_test_folded_name = "/Upload/"
