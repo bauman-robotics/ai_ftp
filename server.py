@@ -24,17 +24,11 @@ UPLOAD_FOLDER = Path('./Upload').resolve()
 ROOT = Path("./static").resolve()
 DEFAULT_IMGS_FOLDER = Path("./default_image_folder").resolve()
 #==========================================
-#== Use instead absolute path =============
-#UPLOAD_FOLDER = Path('/home/arkhan/Andrey/ai_ftp/Upload').resolve()
-#ROOT = Path('/home/arkhan/Andrey/ai_ftp/static').resolve()
-#DEFAULT_IMGS_FOLDER = Path('/home/arkhan/Andrey/ai_ftp/default_image_folder').resolve()
-#==========================================
+
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'mp4', 'mp3', 'ogg', 'm4a', 'avi', 'mov', 'zip', 'rar', '7z', 'tar', 'gz', 'iso', 'apk', 'exe', 'msi', 'deb', 'pkg', 'dmg', 'bin', 'bat', 'sh', 'py', 'c', 'cpp',
                          'java', 'js', 'html', 'htm', 'css', 'scss', 'json', 'xml', 'csv', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf', 'csv', 'db', 'dbf', 'log', 'mdb', 'sav', 'sql', 'tar', 'xml', 'apk', 'bat', 'bin', 'com', 'exe', 'jar', 'ai'])
 SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
 DOWNLOAD_INTERVAL = 0
-
-#error = "<html><head><title>{status}</title></head><body><center><h1>{status}</h1></center><hr><center>{server}</center></body></html>"
 
 app = Flask(__name__, template_folder=ROOT)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -143,19 +137,6 @@ def download(filename):
     return send_from_directory(full_path, filename, as_attachment=True)
 #=========================================================
 
-# @app.route('/delete', methods=['POST'])
-# def delete_files():
-#     exclude_f_name = 'README.md' #'0.png'
-#     file_names = request.form.getlist('delete_file')
-#     print('file_names = ', file_names)
-#     for file_name in file_names:
-#         filepath = Path(file_name)
-#         if filepath.isdir(filepath):
-#             shutil.rmtree(filepath)
-#         else:
-#             filepath.unlink()
-#     return redirect(url_for('list_files'))
-
 @app.route('/delete', methods=['POST'])
 def delete_files():
     exclude_f_name = 'README.md'  # '0.png'
@@ -253,6 +234,6 @@ if __name__ == '__main__':
     current_directory = os.getcwd()
     print(f"Current directory: {current_directory}")
 
-    app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
-    #app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
+    #app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
+    app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
 #=========================================================

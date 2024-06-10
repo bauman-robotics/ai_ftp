@@ -11,9 +11,7 @@ file_h = 28
 file_w = 28
 MAX_COUNT_TEST_IMGS = 100
 
-#=== Fake path === This path is send by up level ===
-work_directory = '/' #"/home/andrey/projects/ai/ai_ftp"
-#===================================================
+work_directory = '/' 
 #=== Input Path ===
 input_test_folded_name = "/Upload/"
 #=== Output Path ===
@@ -25,12 +23,8 @@ result_file_name = "result.c"
 list_of_good_test_files = ['' for _ in range(MAX_COUNT_TEST_IMGS)]
 count_of_good_test_files = 0
 
-#f_name_ok  = ['' for _ in range(MAX_COUNT_TEST_IMGS)]
-#file_ok_count = 0
 #-------------------------------
 def Test_Imgs_Get(path, f_name_ok) :    
-	#-------------------------------
-	#file_ok_count = 0
 	#-------------------------------
 	f_name_bad = ['' for _ in range(MAX_COUNT_TEST_IMGS)]
 	file_bad_count = 0
@@ -159,8 +153,6 @@ def Get_Output_Folder_Path() :
 #=============================================================
 #=============================================================
 
-
-
 def delete_all_files_in_folder(folder_path):
 	"""
 	Удаляет все файлы из указанной папки, кроме указанного файла.
@@ -185,4 +177,5 @@ def delete_all_files_in_folder(folder_path):
 		print('Все файлы, кроме указанного, успешно удалены.')
 	except Exception as e:
 		print(f'Произошла ошибка при удалении файлов: {e}')
-
+#=============================================================
+#=============================================================
