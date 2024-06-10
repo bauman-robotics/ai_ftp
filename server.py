@@ -17,9 +17,6 @@ import logging
 import ftplib
 import urllib
 
-import get_current_directory
-
-
 # Configuration
 #==========================================
 #== If Start from Crontab - wrong path ===
@@ -146,18 +143,31 @@ def download(filename):
     return send_from_directory(full_path, filename, as_attachment=True)
 #=========================================================
 
+# @app.route('/delete', methods=['POST'])
+# def delete_files():
+#     exclude_f_name = 'README.md' #'0.png'
+#     file_names = request.form.getlist('delete_file')
+#     print('file_names = ', file_names)
+#     for file_name in file_names:
+#         filepath = Path(file_name)
+#         if filepath.isdir(filepath):
+#             shutil.rmtree(filepath)
+#         else:
+#             filepath.unlink()
+#     return redirect(url_for('list_files'))
+
 @app.route('/delete', methods=['POST'])
 def delete_files():
-    exclude_f_name = 'README.md' #'0.png'
+    exclude_f_name = 'README.md'  # '0.png'
     file_names = request.form.getlist('delete_file')
     print('file_names = ', file_names)
     for file_name in file_names:
         filepath = Path(file_name)
-        if filepath.isdir(filepath):
+        if filepath.is_dir():
             shutil.rmtree(filepath)
         else:
             filepath.unlink()
-    return redirect(url_for('list_files'))
+    return redirect(url_for('list_files'))    
 #=========================================================
 
 @app.route('/delete_all')
