@@ -25,9 +25,13 @@ from logging.handlers import RotatingFileHandler
 # Configuration
 #==========================================
 #== If Start from Crontab - wrong path ===
-UPLOAD_FOLDER = Path('./Upload').resolve()
-ROOT = Path("./static").resolve()
-DEFAULT_IMGS_FOLDER = Path("./default_image_folder").resolve()
+# UPLOAD_FOLDER = Path('./Upload').resolve()
+# ROOT = Path("./static").resolve()
+# DEFAULT_IMGS_FOLDER = Path("./default_image_folder").resolve()
+
+UPLOAD_FOLDER       = Path(os.path.dirname(os.path.abspath(__file__)) + '/Upload').resolve()
+ROOT                = Path(os.path.dirname(os.path.abspath(__file__)) + '/static').resolve()
+DEFAULT_IMGS_FOLDER = Path(os.path.dirname(os.path.abspath(__file__)) + '/default_image_folder').resolve()
 #==========================================
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'mp4', 'mp3', 'ogg', 'm4a', 'avi', 'mov', 'zip', 'rar', '7z', 'tar', 'gz', 'iso', 'apk', 'exe', 'msi', 'deb', 'pkg', 'dmg', 'bin', 'bat', 'sh', 'py', 'c', 'cpp',
@@ -259,6 +263,6 @@ if __name__ == '__main__':
 
     print(f"Current directory: {current_directory}")
 
-    app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
-    #app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
+    #app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
+    app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
 #=========================================================
