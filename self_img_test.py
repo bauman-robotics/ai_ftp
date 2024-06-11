@@ -16,8 +16,9 @@ def main():
     #-----------------
     import os
     
-    path = os.getcwd()
-    
+    #path = os.getcwd()
+    path = os.path.dirname(os.path.abspath(__file__)) 
+
     # In[27]:
     
     
